@@ -20,8 +20,8 @@ TicTacToe::TicTacToe()
     xWins = 0;
     oWins = 0;
     gameTies = 0;
-
-createTwoDimArray();
+    
+    createTwoDimArray();
 }
 
 TicTacToe::~TicTacToe()
@@ -42,10 +42,15 @@ void TicTacToe::gameStats()
 }
 void TicTacToe::resetBoard()
 {
- 
+    for (int i = 0; i < size; ++i){
+        
+        delete [] board[i];
+    }
+    delete [] board;
 }
 void TicTacToe::createTwoDimArray()
 {
+    
     board = new char*[size];
     for(int i = 0; i < size; i++)
     {
@@ -68,7 +73,7 @@ void TicTacToe::displayBoard()
     for (int r = 0; r < size; r++){
         cout << setw(col_width) << r;
         for (int c = 0; c < size; c++)
-            cout << space<< board[r][c]<< vertical;
+            cout << setw(col_width-1) << board[r][c]<< vertical;
         cout << endl;
         for (int i = 0; i < size; i++)
             cout << space;
@@ -85,9 +90,9 @@ void TicTacToe::welcome()
 
 TicTacToe TicTacToe::operator=(const TicTacToe &right)
 {
-    resetBoard();
+    createTwoDimArray();
     // TODO: copy previous board into a new board
-
+    
     return *this;
 }
 
@@ -96,7 +101,6 @@ bool TicTacToe::placePiece(char piece, int row, int col)
     if (row >= 0 && row < size &&
         col >= 0 && col < size && board[row][col] == space){
         board[row][col] = piece;
-        cout << board[row][col] << endl;
         return true;
     }else
         return false;
@@ -104,51 +108,109 @@ bool TicTacToe::placePiece(char piece, int row, int col)
 
 bool TicTacToe::winner(char &piece)
 {
-    bool win = false;
+    //   bool win = false;
     
-    for (int row = 0; row < size; row++) {
-        if (board[row][0] == board[row][1] && board[row][0] == board[row][2] && board[row][0] != space) {
-            piece = board[row][0];
-            win = true;
-        }
-    }
+    // TODO: Figure out how to search row and return if row matches so don't need
+    // to hardcode in the win
     
-    // Check columns
-    for (int col = 0; col < size; col++) {
-        if (board[0][col] == board[1][col] && board[0][col] == board[2][col] && board[0][col] != space) {
-            piece = board[col][0];
-            win = true;
-        }
-    }
     
-    // Check diagonals
-    if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[2][2] != space) {
-        piece = board[0][0];
-        win = true;
-    }
-    if (board[2][0] == board[1][1] && board[1][1] == board[0][2] && board[0][2] != space) {
-        piece = board[2][0];
-        win = true;
-    }
-    // check ties
-    int moves = 0;
-	for(int i = 0; i < size; i++) {
-		for(int j=0; j < size; j++) {
-			if (board[i][j] != space) {
-                moves++;
-            }
-        }
+    bool equals = false;
     
-    if (moves == 9) {
-        piece = gameTies;
-        win = true;
-    }
-        
-    }
-    return win;
+    /*
+     int Xmatches = findMatches('X');
+     int Omatches = findMatches('0');
+     
+     if (Omatches == size)
+     {
+     equals = true;
+     }
+     if (Xmatches == size){
+     equals = true;
+     }
+     */
+    return equals;
+    
+    
 }
+bool TicTacToe::findMatches(char piece)
+{
+    bool foundRows = false;
+    bool foundCols = false;
+    // bool foundDiag1 = false;
+    
+    int row = 0;
+    int col = 0;
+    while (row < size) {
+        col = 0;
+        while (col < size) {
+            if (board[row][0] == board[row][col] && board[row][col] != space) {
+                foundRows = true;
+            } else {
+                foundRows = false;
+            }
+            col++;
+        }
+        if(foundRows) break;
+        row++;
+    }
+    col++;
+    
+    col = 0;
+    while (col < size) {
+        row = 0;
+        while (row < size) {
+            if (board[0][col] == board[row][col] && board[row][col] != space) {
+                foundCols = true;
+            } else {
+                foundCols = false;
+            }
+            
+            row++;
+        }
+        if(foundCols) break;
+        col++;
+    }
+/*
+    col = 0;
+    row = 0;
+    while (col < size) {
+        row = col;
+        while (row < size - 1) {
+            if (board[row][col] == board[row + 1][col + 1] && board[row][col] != space) {
+                foundDiag1 = true;
+            } else {
+                foundDiag1 = false;
+            }
+            row++;
+        }
+        if(foundDiag1) break;
+        col++;
+    }
+
+*/
+    return foundRows || foundCols;
+}
+
 
 void TicTacToe::goodBye()
 {
     cout << endl << "Thanks for playing, goodbye!" << endl;
 }
+void TicTacToe::stats()
+{
+    cout << "X won: " << xWins << endl;
+    cout << "O won: " << oWins << endl;
+    cout << "Ties: " << gameTies << endl;
+    
+}
+
+void TicTacToe::collectStats(char piece)
+{
+    if (piece == 'X')
+        xWins++;
+    if (piece == 'T')
+        gameTies++;
+    if (piece == 'O')
+        oWins++;
+}
+
