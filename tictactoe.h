@@ -25,14 +25,20 @@ public:
     
     bool placePiece(char piece, int row, int col);    // returns result of attempt
     
-    bool winner(char& piece);    // returns false if no winner else; returns true and piece
+    bool winner(char &piece);    // returns false if no winner else; returns true and piece
     
     void goodBye();    // goodbye message
     
     void createTwoDimArray();
     
+    void stats();
+    
+    void collectStats (char piece);
+    
+    bool findMatches(char piece);
+    
     TicTacToe operator=(const TicTacToe &right);
-
+    
 private:
     // building the tic tac toe board
     char vertical;
