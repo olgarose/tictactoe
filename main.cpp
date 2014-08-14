@@ -5,7 +5,9 @@
 #include "tictactoe.h"
 using namespace std;
 
+
 void welcome();
+void clearScreen();
 
 int main()
 {
@@ -21,12 +23,17 @@ int main()
     int moves = 0;
     bool win = false;
     
+    
+    
     TicTacToe newGameboard;
     
     
     welcome();
+    
     cout << "Would you like to play?(y/n): ";
     cin >> answer;
+    
+    clearScreen();
     
     while (tolower(answer) == 'y'){
         TicTacToe gameboard;
@@ -65,7 +72,7 @@ int main()
             }
         
         // Display board with the final results of the game
-        gameboard.displayBoard();
+        // gameboard.displayBoard();
         }
         
      if (winningPiece == xPiece){
@@ -73,6 +80,7 @@ int main()
             cout << "X won! Congratulations!" << endl;
         }else if (winningPiece == oPiece){
             cout << "O won! Congratulations!" << endl;
+                 gameboard.collectStats(oPiece);
         }
         else if (moves == 9){
             winningPiece = tie;
@@ -80,15 +88,13 @@ int main()
             gameboard.collectStats(tie);
         }
         
-        gameboard.collectStats(oPiece);
+   
         
         // Displays all game stats
         gameboard.stats();
         
         cout << "Do you want to play again? ";
         cin >> answer;
-        newGameboard = gameboard;
-        win = false;
     
     }
     return 0;
@@ -96,4 +102,9 @@ int main()
 void welcome()
 {
     cout << endl << "Welcome!" << endl;
+}
+
+void clearScreen()
+{
+        cout << string( 50, '\n' );
 }
