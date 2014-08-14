@@ -73,7 +73,7 @@ void TicTacToe::displayBoard()
     for (int r = 0; r < size; r++){
         cout << setw(col_width) << r;
         for (int c = 0; c < size; c++)
-            cout << setw(col_width-1) << board[r][c]<< vertical;
+            cout << setw(col_width-1) << board[r][c] << vertical;
         cout << endl;
         for (int i = 0; i < size; i++)
             cout << space;
